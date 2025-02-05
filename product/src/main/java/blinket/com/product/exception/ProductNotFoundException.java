@@ -1,8 +1,15 @@
 package blinket.com.product.exception;
 
-public class ProductException extends RuntimeException {
-    public ProductException(String message) {
 
-        super();
+
+public class ProductNotFoundException extends RuntimeException {
+    public ProductNotFoundException() {
+        super("Product Not Found Exception");
     }
+
+    public ProductNotFoundException(String message) {
+        super(message);
+    }
+
+
 }

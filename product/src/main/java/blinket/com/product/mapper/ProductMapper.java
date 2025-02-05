@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
@@ -14,7 +16,9 @@ public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     @Mapping(target = "id", ignore = true)
-    Product DtoToEntity(ProductRequestDto requestDto);
+    Product PRODUCT(ProductRequestDto requestDto);
 
-    ProductResponseDto EntityToDto(Product product);
+    ProductResponseDto PRODUCT_RESPONSE_DTO(Product product);
+
+    List<ProductResponseDto> PRODUCT_RESPONSE_DTO_LIST(List<Product> productList);
 }

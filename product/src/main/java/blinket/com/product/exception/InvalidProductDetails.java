@@ -1,7 +1,10 @@
 package blinket.com.product.exception;
 
-public class Invalidproductdetails extends RuntimeException {
-  public Invalidproductdetails(String message) {
-    super(message);
-  }
+public class InvalidProductDetails extends RuntimeException {
+    public InvalidProductDetails() {
+        super("Invalid Product Details");
+       // message("Product Not Found");
+    }
+
+
 }

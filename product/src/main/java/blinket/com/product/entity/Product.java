@@ -6,6 +6,8 @@ import blinket.com.product.enums.ProductCategory;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "products_table")
@@ -27,5 +29,7 @@ public class Product {
 
     @Column(name = "is_active",updatable = true)
     private Boolean is_active;
+
+
 
 }

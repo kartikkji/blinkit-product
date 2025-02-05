@@ -4,6 +4,7 @@ package blinket.com.product.service;
 import blinket.com.product.dto.requestDto.ProductRequestDto;
 import blinket.com.product.dto.responseDto.ProductResponseDto;
 import blinket.com.product.enums.ProductCategory;
+import blinket.com.product.exception.ProductNotFoundException;
 import blinket.com.product.mapper.ProductMapper;
 import blinket.com.product.repo.ProductRepository;
 import blinket.com.product.entity.Product;
@@ -22,14 +23,12 @@ import java.util.Optional;
 public class ProductService {
 
     @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    ProductMapper productMapper;
+    private ProductRepository productRepository;
 
     public ResponseEntity<?> saveProduct(ProductRequestDto product){
 
         try{
+            // productRequest.
             productRepository.save(DtoToProduct(product));
             return new ResponseEntity<>("product created success fully" , HttpStatus.CREATED);
         } catch (Exception e){
@@ -38,23 +37,24 @@ public class ProductService {
 
     }
 
-    public ResponseEntity<?> getProductById(Integer id){
+    public ResponseEntity<?> getProductById(Integer id) {
+        try {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(ProductNotFoundException::new); // Using default constructor
 
-        Optional<Product> product = productRepository.findById(id);
-
-        if (product.isPresent()) {
-            return ResponseEntity.ok(ProductToDto(product.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid ID: Product not found");
+            return ResponseEntity.ok(ProductToDto(product));
+        } catch (ProductNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An unexpected error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     public ResponseEntity<?> getProductByName(String name){
 
         Product product = productRepository.findByName(name);
 
         if (product != null) {
-            return ResponseEntity.ok(product);
+            return ResponseEntity.ok(ProductToDto(product));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid Name: Product not found");
         }
@@ -68,7 +68,7 @@ public class ProductService {
             List<Product> product = productRepository.findByCategory(productCategory);
 
             if (!product.isEmpty()) {
-                return ResponseEntity.ok(product);
+                return ResponseEntity.ok(productResponseDtoList(product));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No products available in this category");
             }
@@ -107,7 +107,7 @@ public class ProductService {
             });
 
             Product updatedProduct = productRepository.save(product);
-            return ResponseEntity.ok(updatedProduct);
+            return ResponseEntity.ok(ProductToDto(updatedProduct));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Field or Request Data");
@@ -115,10 +115,14 @@ public class ProductService {
     }
 
     public Product DtoToProduct(ProductRequestDto productRequestDto){
-        return ProductMapper.INSTANCE.DtoToEntity(productRequestDto);
+        return ProductMapper.INSTANCE.PRODUCT(productRequestDto);
     }
 
     public ProductResponseDto ProductToDto(Product product){
-        return ProductMapper.INSTANCE.EntityToDto(product);
+        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO(product);
+    }
+
+    public List<ProductResponseDto> productResponseDtoList(List<Product> productList){
+        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO_LIST(productList);
     }
 }
