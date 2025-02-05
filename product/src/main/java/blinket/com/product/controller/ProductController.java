@@ -1,6 +1,7 @@
 package blinket.com.product.controller;
 
 
+import blinket.com.product.dto.requestDto.ProductRequestDto;
 import blinket.com.product.enums.ProductCategory;
 import blinket.com.product.service.ProductService;
 import blinket.com.product.entity.Product;
@@ -25,58 +26,31 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewProduct(@RequestBody Product product){
-
-        Boolean success = productService.saveProduct(product);
-
-        if(success){
-            return new ResponseEntity<>("product created success fully" , HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>("Invalid product details" , HttpStatus.BAD_REQUEST);
-        }
-
+    public ResponseEntity<?> createNewProduct(@RequestBody ProductRequestDto product){
+        return productService.saveProduct(product);
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getProductBYId(@PathVariable Integer id){
-        ResponseEntity<?> product = productService.getProductById(id);
-
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
+        return  productService.getProductById(id);
     }
 
     @GetMapping("/get/name")
     public ResponseEntity<?> getProductBYName(@RequestParam String name){
-        ResponseEntity<?> product = productService.getProductByName(name);
-
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
+        return productService.getProductByName(name);
     }
 
 
     @GetMapping("/get/category/{category}")
     public ResponseEntity<?> getProductBYCategory(@PathVariable String category){
-
        return productService.getProductByCategory((category));
     }
 
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<?> deleteBYId(@PathVariable Integer id){
-//        Boolean isDelete = productService.deleteById(id);
-//
-//        if(isDelete){
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Product deleted successfully");
-//        }else{
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with id: " + id);
-//        }
-//    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteBYId(@PathVariable Integer id){
+        return  productService.deleteById(id);
+    }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Integer id, @RequestBody Map<String, Object> update) {

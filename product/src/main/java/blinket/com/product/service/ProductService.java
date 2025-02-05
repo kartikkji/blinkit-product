@@ -1,7 +1,10 @@
 package blinket.com.product.service;
 
 
+import blinket.com.product.dto.requestDto.ProductRequestDto;
+import blinket.com.product.dto.responseDto.ProductResponseDto;
 import blinket.com.product.enums.ProductCategory;
+import blinket.com.product.mapper.ProductMapper;
 import blinket.com.product.repo.ProductRepository;
 import blinket.com.product.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +24,16 @@ public class ProductService {
     @Autowired
     ProductRepository productRepository;
 
-    public Boolean saveProduct(Product product){
+    @Autowired
+    ProductMapper productMapper;
+
+    public ResponseEntity<?> saveProduct(ProductRequestDto product){
 
         try{
-            productRepository.save(product);
-            return true;
+            productRepository.save(DtoToProduct(product));
+            return new ResponseEntity<>("product created success fully" , HttpStatus.CREATED);
         } catch (Exception e){
-            return false;
+            return new ResponseEntity<>("Invalid product details" , HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -37,7 +43,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
 
         if (product.isPresent()) {
-            return ResponseEntity.ok(product.get());
+            return ResponseEntity.ok(ProductToDto(product.get()));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid ID: Product not found");
         }
@@ -72,16 +78,15 @@ public class ProductService {
     }
 
 
-//    public Boolean deleteById(Integer id){
-//        Optional<Product> product = productRepository.findById(id);
-//
-//        if(product.isPresent()){
-//            productRepository.deleteById(id);
-//            return true;
-//        }
-//
-//        return false;
-//    }
+    public ResponseEntity<?> deleteById(Integer id){
+        Optional<Product> product = productRepository.findById(id);
+
+        if(product.isPresent()){
+            productRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Product deleted successfully");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with id: " + id);
+    }
 
     public ResponseEntity<?> updateProductById(Integer id, Map<String, Object> update) {
         try {
@@ -107,5 +112,13 @@ public class ProductService {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Field or Request Data");
         }
+    }
+
+    public Product DtoToProduct(ProductRequestDto productRequestDto){
+        return ProductMapper.INSTANCE.DtoToEntity(productRequestDto);
+    }
+
+    public ProductResponseDto ProductToDto(Product product){
+        return ProductMapper.INSTANCE.EntityToDto(product);
     }
 }

@@ -24,17 +24,8 @@ public class Product {
     @Column(name = "category",nullable = false)
     private ProductCategory category;
 
-//    @Column(name = "sku")
-//    private String sku;
-//
-//    @Column(name = "price")
-//    private float price;
-
-//    @Column(name = "stock_quantity")
-//    private Integer stock_quantity;
 
     @Column(name = "is_active",updatable = true)
     private Boolean is_active;
-
 
 }
