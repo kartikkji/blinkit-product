@@ -3,8 +3,9 @@ package blinket.com.product.service;
 
 import blinket.com.product.dto.requestDto.ProductRequestDto;
 import blinket.com.product.dto.responseDto.ProductResponseDto;
+import blinket.com.product.entity.ProductImage;
 import blinket.com.product.enums.ProductCategory;
-import blinket.com.product.exception.ProductNotFoundException;
+import blinket.com.product.exception.productException.ProductNotFoundException;
 import blinket.com.product.mapper.ProductMapper;
 import blinket.com.product.repo.ProductRepository;
 import blinket.com.product.entity.Product;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +27,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private  ImageService imageService;
 
     public ResponseEntity<?> saveProduct(ProductRequestDto product){
 
@@ -114,15 +120,79 @@ public class ProductService {
         }
     }
 
-    public Product DtoToProduct(ProductRequestDto productRequestDto){
-        return ProductMapper.INSTANCE.PRODUCT(productRequestDto);
+//    public Product DtoToProduct(ProductRequestDto productRequestDto){
+//        return ProductMapper.INSTANCE.PRODUCT(productRequestDto);
+//    }
+//
+//    public ProductResponseDto ProductToDto(Product product){
+//        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO(product);
+//    }
+//
+//    public List<ProductResponseDto> productResponseDtoList(List<Product> productList){
+//        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO_LIST(productList);
+//    }
+
+    public List<ProductResponseDto> productResponseDtoList(List<Product> productList){
+
+        List<ProductResponseDto> responseDtoList = new ArrayList<>();
+
+        for(Product product : productList) {
+            ProductResponseDto productResponseDto = new ProductResponseDto();
+            productResponseDto.setId(product.getId());
+            productResponseDto.setCategory(product.getCategory().toString());
+            productResponseDto.setName(product.getName());
+            productResponseDto.setDescription(product.getDescription());
+            productResponseDto.setCreatedAt(product.getCreateAt());
+            productResponseDto.setIs_active(product.getIs_active());
+            productResponseDto.setCreateBy(product.getCreateBy());
+            List<ProductImage> imageList = imageService.findByProductId(product.getId());
+
+            if(!imageList.isEmpty()){
+                productResponseDto.setImageList(imageList);
+            }
+
+            responseDtoList.add(productResponseDto);
+
+        }
+
+        return responseDtoList;
+    }
+
+    public Product DtoToProduct(ProductRequestDto productDTO) {
+       Product product = new Product();
+       product.setCategory(ProductCategory.valueOf(productDTO.getCategory().toUpperCase()));
+       product.setName(productDTO.getName());
+       product.setDescription(productDTO.getDescription());
+       product.setCreateAt(LocalDateTime.now());
+       if(productDTO.getIs_active() != null){
+           product.setIs_active(productDTO.getIs_active());
+       }
+       product.setCreateBy(productDTO.getCreateBy());
+
+        return product;
+
+
     }
 
     public ProductResponseDto ProductToDto(Product product){
-        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO(product);
+        ProductResponseDto productResponseDto = new ProductResponseDto();
+        productResponseDto.setId(product.getId());
+        productResponseDto.setCategory(product.getCategory().toString());
+        productResponseDto.setName(product.getName());
+        productResponseDto.setDescription(product.getDescription());
+        productResponseDto.setCreatedAt(product.getCreateAt());
+        productResponseDto.setIs_active(product.getIs_active());
+        productResponseDto.setCreateBy(product.getCreateBy());
+
+        List<ProductImage> imageList = imageService.findByProductId(product.getId());
+
+        if(!imageList.isEmpty()){
+            productResponseDto.setImageList(imageList);
+        }
+
+        return productResponseDto;
+
+
     }
 
-    public List<ProductResponseDto> productResponseDtoList(List<Product> productList){
-        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO_LIST(productList);
-    }
 }

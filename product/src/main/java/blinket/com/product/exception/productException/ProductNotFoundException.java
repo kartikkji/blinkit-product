@@ -1,4 +1,4 @@
-package blinket.com.product.exception;
+package blinket.com.product.exception.productException;
 
 
 
