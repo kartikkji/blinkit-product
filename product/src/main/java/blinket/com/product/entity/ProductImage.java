@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Data
-@Builder
 @Table(name = "image_table")
 public class ProductImage {
 
@@ -49,9 +47,7 @@ public class ProductImage {
         this.id = id;
     }
 
-    public Integer getProductId() {
-        return productId;
-    }
+    public Integer getProductId() {return productId;}
 
     public void setProductId(Integer productId) {
         this.productId = productId;
@@ -65,9 +61,7 @@ public class ProductImage {
         this.imageUrl = imageUrl;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public LocalDateTime getCreatedAt() {return createdAt;}
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
@@ -97,9 +91,7 @@ public class ProductImage {
         this.updateBy = updateBy;
     }
 
-    public Boolean getPrimary() {
-        return isPrimary;
-    }
+    public Boolean getPrimary() {return isPrimary;}
 
     public void setPrimary(Boolean primary) {
         isPrimary = primary;

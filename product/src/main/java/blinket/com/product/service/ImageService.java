@@ -55,11 +55,15 @@ public class ImageService {
 
     List<ProductImage> findByProductId(Integer id){
 
+        //List<ProductImage> productImageList =  imageRepository.findByProductId(id);
+
         return imageRepository.findByProductId(id);
+
+       // return imageProductListToimageResponseDtoList(productImageList);
 
     }
 
-    public List<ImageResponseDto> imageProductListToimageResponseDtoList(List<ProductImage> productImageList){
+    public List<ImageResponseDto>  imageProductListToimageResponseDtoList(List<ProductImage> productImageList){
         List<ImageResponseDto> imageResponseDtoList = new ArrayList<>();
         for(ProductImage productImage : productImageList){
             ImageResponseDto imageResponseDto = new ImageResponseDto();
@@ -77,8 +81,6 @@ public class ImageService {
 
 
     }
-
-
 
 
 }

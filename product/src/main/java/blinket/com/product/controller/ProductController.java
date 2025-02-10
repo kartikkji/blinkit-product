@@ -22,6 +22,8 @@ import static org.yaml.snakeyaml.tokens.Token.ID.Key;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
+
+
     @Autowired
     ProductService productService;
 
@@ -40,12 +42,10 @@ public class ProductController {
         return productService.getProductByName(name);
     }
 
-
     @GetMapping("/get/category/{category}")
     public ResponseEntity<?> getProductBYCategory(@PathVariable String category){
        return productService.getProductByCategory((category));
     }
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteBYId(@PathVariable Integer id){
@@ -57,5 +57,9 @@ public class ProductController {
         return productService.updateProductById(id, update);
     }
 
+    @GetMapping("/get/all")
+    public ResponseEntity<?> getAllById(){
+        return productService.getAllProductById();
+    }
 
 }

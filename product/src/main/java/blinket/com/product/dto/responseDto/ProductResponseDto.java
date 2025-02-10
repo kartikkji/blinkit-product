@@ -1,7 +1,6 @@
 package blinket.com.product.dto.responseDto;
 
 import blinket.com.product.entity.ProductImage;
-import blinket.com.product.enums.ProductCategory;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,9 +18,9 @@ public class ProductResponseDto {
     private String description;
     private Boolean is_active;
     private Integer stock;
-    private List<ProductImage> imageList;
     private LocalDateTime createdAt;
     private String createBy;
+    private List<ProductImage> imageList;
 
 
 
@@ -48,7 +47,6 @@ public class ProductResponseDto {
     public void setId(Integer id) {
         this.id = id;
     }
-
 
     public String getCreateBy() {
         return createBy;
@@ -101,6 +99,7 @@ public class ProductResponseDto {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }

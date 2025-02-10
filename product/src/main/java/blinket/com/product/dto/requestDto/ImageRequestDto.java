@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.Internal;
 
-@Data
-@Builder
 public class ImageRequestDto {
 
         private String imageUrl;
@@ -22,7 +20,6 @@ public class ImageRequestDto {
         public Integer getProductId() {
                 return productId;
         }
-
 
         public String getImageUrl() {
                 return imageUrl;
@@ -40,18 +37,11 @@ public class ImageRequestDto {
                 this.updateBy = updateBy;
         }
 
-        public String getCreateBy() {
-                return createBy;
-        }
+        public String getCreateBy() { return createBy; }
 
-        public void setCreateBy(String createBy) {
-                this.createBy = createBy;
-        }
+        public void setCreateBy(String createBy) {this.createBy = createBy;}
 
-        public Boolean getPrimary() {
-                return isPrimary;
-        }
-        public void setPrimary(Boolean primary) {
-                isPrimary = primary;
-        }
+        public Boolean getPrimary() {return isPrimary;}
+
+        public void setPrimary(Boolean primary) {isPrimary = primary;}
 }
