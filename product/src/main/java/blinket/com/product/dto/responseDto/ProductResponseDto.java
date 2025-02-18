@@ -1,6 +1,6 @@
 package blinket.com.product.dto.responseDto;
 
-import blinket.com.product.entity.ProductImage;
+import blinket.com.product.entity.Image;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,15 +20,15 @@ public class ProductResponseDto {
     private Integer stock;
     private LocalDateTime createdAt;
     private String createBy;
-    private List<ProductImage> imageList;
+    private List<String> imageList;
 
 
 
-    public List<ProductImage> getImageList() {
+    public List<String> getImageList() {
         return imageList;
     }
 
-    public void setImageList(List<ProductImage> imageList) {
+    public void setImageList(List<String> imageList) {
         this.imageList = imageList;
     }
 

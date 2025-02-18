@@ -1,24 +1,29 @@
 package blinket.com.product.dto.requestDto;
 
-import blinket.com.product.enums.ProductCategory;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
 
-@Builder
+import java.util.List;
+
+
 public class ProductRequestDto {
 
+    @NotBlank(message = "must be enter name")
     private String name;
-    private String category;
-    private String description;
-    private Boolean is_active;
-    private String createBy;
 
+    @NotBlank(message = "must be enter category")
+    private String category;
+
+    @NotBlank(message = "must be enter description")
+    private String description;
+
+    @NotBlank(message = "must be enter is_active")
+    private Boolean is_active;
+
+    @NotBlank(message = "must be enter imageList")
+    private List<String> imageList;
 
     public String getName() {
         return name;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public void setName(String name) {
@@ -29,6 +34,9 @@ public class ProductRequestDto {
         return category;
     }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     public String getDescription() {
         return description;
@@ -46,11 +54,11 @@ public class ProductRequestDto {
         this.is_active = is_active;
     }
 
-    public String getCreateBy() {
-        return createBy;
+    public List<String> getImageList() {
+        return imageList;
     }
 
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
     }
 }

@@ -1,9 +1,8 @@
 package blinket.com.product.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -11,14 +10,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "image_table")
-public class ProductImage {
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(name = "productId")
-    private Integer productId;
 
     @Column(name = "imageUrl")
     private String imageUrl;
@@ -38,6 +34,19 @@ public class ProductImage {
     @Column(name = "isPrimary")
     private Boolean isPrimary;
 
+    @ManyToOne()
+    @JoinColumn(name = "product_id")
+    @JsonIgnore
+    private Product product;
+
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
     public Integer getId() {
         return id;
@@ -47,11 +56,6 @@ public class ProductImage {
         this.id = id;
     }
 
-    public Integer getProductId() {return productId;}
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public String getImageUrl() {
         return imageUrl;

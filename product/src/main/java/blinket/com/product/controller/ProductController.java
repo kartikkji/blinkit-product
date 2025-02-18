@@ -6,6 +6,7 @@ import blinket.com.product.enums.ProductCategory;
 import blinket.com.product.service.ProductService;
 import blinket.com.product.entity.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.validation.Valid;
 import org.apache.el.util.ReflectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

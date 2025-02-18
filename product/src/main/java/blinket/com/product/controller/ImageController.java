@@ -2,8 +2,6 @@ package blinket.com.product.controller;
 
 
 import blinket.com.product.dto.requestDto.ImageRequestDto;
-import blinket.com.product.entity.ProductImage;
-import blinket.com.product.repo.ImageRepository;
 import blinket.com.product.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
