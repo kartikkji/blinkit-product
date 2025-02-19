@@ -9,6 +9,7 @@ import blinket.com.product.exception.productException.ProductNotFoundException;
 import blinket.com.product.repo.ProductRepository;
 import blinket.com.product.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,15 +28,19 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Lazy
     @Autowired
     private  ImageService imageService;
 
-    public ResponseEntity<?> saveProduct(ProductRequestDto product){
+    @Autowired
+    private IdentityServiceClient identityServiceClient;
+
+    public ResponseEntity<?> saveProduct(ProductRequestDto product , Integer id){
 
         try{
-            Product product1 =  productRepository.save(DtoToProduct(product));
+            Product product1 =  productRepository.save(DtoToProduct(product,id));
 
-            List<String> image = imageService.productImageListToImage(product.getImageList(), product1);
+            List<String> imageList = imageService.productImageListToImage(product.getImageList(), product1);
 
             return new ResponseEntity<>("product created success fully with id " + product1.getId(), HttpStatus.CREATED);
         } catch (Exception e){
@@ -43,11 +48,17 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> getProductById(Integer id) {
+    public ResponseEntity<?> getProductDtoById(Integer id) {
             Product product = productRepository.findById(id)
                     .orElseThrow(() -> new ProductNotFoundException("Invalid ID: Product not found with id "+ id));
 
-            return ResponseEntity.ok(ProductToDto(product));
+            return ResponseEntity.ok(productResponseDtoList(product));
+
+    }
+
+    public Optional<Product> getProductById(Integer id) {
+        Optional<Product> product = productRepository.findById(id);
+        return  product;
 
     }
 
@@ -56,7 +67,7 @@ public class ProductService {
         Product product = productRepository.findByName(name);
 
         if (product != null) {
-            return ResponseEntity.ok(ProductToDto(product));
+            return ResponseEntity.ok(productResponseDtoList(product));
         } else {
             throw new ProductNotFoundException("Invalid Name: Product not found with name : "+ name);
         }
@@ -116,7 +127,7 @@ public class ProductService {
             });
 
             Product updatedProduct = productRepository.save(product);
-            return ResponseEntity.ok(ProductToDto(updatedProduct));
+            return ResponseEntity.ok(productResponseDtoList(updatedProduct));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Field or Request Data");
@@ -156,9 +167,10 @@ public class ProductService {
             productResponseDto.setCategory(product.getCategory().toString());
             productResponseDto.setName(product.getName());
             productResponseDto.setDescription(product.getDescription());
-            productResponseDto.setCreatedAt(product.getCreateAt());
             productResponseDto.setIs_active(product.getIs_active());
             productResponseDto.setCreateBy(product.getCreateBy());
+            productResponseDto.setPrice(1000);
+            productResponseDto.setStock(50);
             List<String> imageUrls = new ArrayList<>();
             for (Image image : product.getImages()) {
                 imageUrls.add(image.getImageUrl()); // Extract and add the URL
@@ -167,36 +179,37 @@ public class ProductService {
 
             responseDtoList.add(productResponseDto);
 
+
         }
+
+
 
         return responseDtoList;
     }
 
-
-
-    public Product DtoToProduct(ProductRequestDto productDTO) {
+    public Product DtoToProduct(ProductRequestDto productDTO, Integer id) {
        Product product = new Product();
        product.setCategory(ProductCategory.valueOf(productDTO.getCategory().toUpperCase()));
        product.setName(productDTO.getName());
        product.setDescription(productDTO.getDescription());
        product.setCreateAt(LocalDateTime.now());
-       product.setCreateBy("kartik");
+       product.setCreateBy(identityServiceClient.getAdminNameById(id));
         if(productDTO.getIs_active() != null){
            product.setIs_active(productDTO.getIs_active());
         }
 
+
         return product;
+
 
     }
 
-
-    public ProductResponseDto ProductToDto(Product product){
+    public ProductResponseDto productResponseDtoList(Product product){
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setId(product.getId());
         productResponseDto.setCategory(product.getCategory().toString());
         productResponseDto.setName(product.getName());
         productResponseDto.setDescription(product.getDescription());
-        productResponseDto.setCreatedAt(product.getCreateAt());
         productResponseDto.setIs_active(product.getIs_active());
         productResponseDto.setCreateBy(product.getCreateBy());
         productResponseDto.setPrice(1000);
@@ -205,6 +218,7 @@ public class ProductService {
             imageUrls.add(image.getImageUrl()); // Extract and add the URL
         }
         productResponseDto.setImageList(imageUrls);
+
 
         return productResponseDto;
 

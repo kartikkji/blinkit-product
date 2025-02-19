@@ -18,7 +18,6 @@ public class ProductResponseDto {
     private String description;
     private Boolean is_active;
     private Integer stock;
-    private LocalDateTime createdAt;
     private String createBy;
     private List<String> imageList;
 
@@ -30,14 +29,6 @@ public class ProductResponseDto {
 
     public void setImageList(List<String> imageList) {
         this.imageList = imageList;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public Integer getId() {

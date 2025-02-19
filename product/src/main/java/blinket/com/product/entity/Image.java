@@ -32,7 +32,7 @@ public class Image {
     private String updateBy;
 
     @Column(name = "isPrimary")
-    private Boolean isPrimary;
+    private Boolean isPrimary = false;
 
     @ManyToOne()
     @JoinColumn(name = "product_id")
