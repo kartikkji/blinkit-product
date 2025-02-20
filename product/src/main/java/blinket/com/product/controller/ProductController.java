@@ -57,4 +57,9 @@ public class ProductController {
         return productService.getAllProductById( page, 10);
     }
 
+    @GetMapping("/check/{id}")
+    public Boolean checkProductById(@PathVariable Integer id){
+        return productService.checkProductById(id);
+    }
+
 }

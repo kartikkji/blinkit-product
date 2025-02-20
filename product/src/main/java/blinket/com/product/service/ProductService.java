@@ -111,6 +111,11 @@ public class ProductService {
 
     }
 
+    public Boolean checkProductById(Integer id){
+        return productRepository.existsById(id);
+
+    }
+
     public ResponseEntity<?> updateProductById(Integer id, Map<String, Object> update) {
         try {
             Optional<Product> productOpt = productRepository.findById(id);
