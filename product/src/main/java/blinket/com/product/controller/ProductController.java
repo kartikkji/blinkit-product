@@ -59,7 +59,7 @@ public class ProductController {
 
     @GetMapping("/check/{id}")
     public Boolean checkProductById(@PathVariable Integer id){
-        return productService.checkProductById(id);
+        return productService.checkProductById(id );
     }
 
 }
