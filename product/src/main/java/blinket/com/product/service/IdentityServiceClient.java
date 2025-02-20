@@ -3,11 +3,9 @@ package blinket.com.product.service;
 
 import blinket.com.product.dto.responseDto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
 
 @Service
 public class IdentityServiceClient {

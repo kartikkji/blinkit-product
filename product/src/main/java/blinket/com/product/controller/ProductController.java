@@ -35,8 +35,10 @@ public class ProductController {
     }
 
     @GetMapping("/get/category/{category}")
-    public ResponseEntity<?> getProductBYCategory(@PathVariable String category){
-       return productService.getProductByCategory((category));
+    public ResponseEntity<?> getProductBYCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") Integer page){
+       return productService.getProductByCategory(category, page, 5);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -50,8 +52,9 @@ public class ProductController {
     }
 
     @GetMapping("/get/all")
-    public ResponseEntity<?> getAllById(){
-        return productService.getAllProductById();
+    public ResponseEntity<?> getAllById(
+            @RequestParam(defaultValue = "0") Integer page){
+        return productService.getAllProductById( page, 10);
     }
 
 }

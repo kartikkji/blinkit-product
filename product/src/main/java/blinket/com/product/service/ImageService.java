@@ -113,8 +113,8 @@ public class ImageService {
 
             Image image = new Image();
             image.setImageUrl(Url);
-            image.setCreateBy("kartik");
-            image.setUpdateBy("kartik");
+            image.setCreateBy(product.getCreateBy());
+            image.setUpdateBy(product.getCreateBy());
             image.setPrimary(true);
             image.setProduct(product);
             image.setCreatedAt(LocalDateTime.now());

@@ -10,6 +10,9 @@ import blinket.com.product.repo.ProductRepository;
 import blinket.com.product.entity.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -73,12 +76,13 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<?> getProductByCategory(String category) {
+    public ResponseEntity<?> getProductByCategory(String category, Integer page , Integer size) {
         try {
 
+            Pageable pageable = PageRequest.of(page,size);
             ProductCategory productCategory = ProductCategory.valueOf(category.toUpperCase());
 
-            List<Product> product = productRepository.findByCategory(productCategory);
+            Page<Product> product = productRepository.findByCategory(productCategory,pageable);
 
             if (!product.isEmpty()) {
                 return ResponseEntity.ok(productResponseDtoList(product));
@@ -134,9 +138,11 @@ public class ProductService {
         }
     }
 
-    public ResponseEntity<List<ProductResponseDto>> getAllProductById(){
+    public ResponseEntity<List<ProductResponseDto>> getAllProductById(Integer page, Integer size){
 
-            List<Product> product =  productRepository.findAll();
+
+        Pageable pageable = PageRequest.of(page, size);
+            Page<Product> product =  productRepository.findAll(pageable);
 
             if(product.isEmpty()){
                 throw new ProductNotFoundException("PRODUCTS_NOT_FOUND");
@@ -157,7 +163,7 @@ public class ProductService {
 //        return ProductMapper.INSTANCE.PRODUCT_RESPONSE_DTO_LIST(productList);
 //    }
 
-    public List<ProductResponseDto> productResponseDtoList(List<Product> productList){
+    public List<ProductResponseDto> productResponseDtoList(Page<Product> productList){
 
         List<ProductResponseDto> responseDtoList = new ArrayList<>();
 
